@@ -3,7 +3,7 @@ import axios from 'axios'
 import { FilePicker } from 'react-file-picker'
 import FileList from './components/FileList'
 
-function uploadFile(getFiles, putFiles) {
+function uploadFile(putFiles) {
   return async (file) => {
     console.log(file)
     const data = new FormData()
@@ -15,30 +15,28 @@ function uploadFile(getFiles, putFiles) {
       console.log(e)
       alert('failed to upload file')
     }
-    populateFileList(putFiles);
+    populateFileList(putFiles)();
   }
 }
 
-function populateFileList(getFiles, putFiles) {
+function populateFileList(putFiles) {
   return async () => {
     const response = await fetch('filelist')
     const files = await response.json()
     console.log('there are', files.fileNames.length, 'files')
-    if (getFiles != files) {
-      putFiles(files.fileNames)
-    }
+    putFiles(files.fileNames)
   }
 }
 
 function App() {
   const [getFiles, putFiles] = useState([])
-  useEffect(populateFileList(getFiles, putFiles));
+  useEffect(() => populateFileList(putFiles)(), []);
 
   return (
     <>
     <br />
     <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-      <FilePicker onChange={uploadFile(getFiles, putFiles)}>
+      <FilePicker onChange={uploadFile(putFiles)}>
         <button>
           Upload a file
         </button>
