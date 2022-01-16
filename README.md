@@ -1,13 +1,12 @@
 # File server
 Server to upload and download files.
 
-# Building
-Build with
+## Build
 ```
 dotnet build
 ```
-# Running
-Run with
+
+## Start server
 ```
 dotnet run
 ```
